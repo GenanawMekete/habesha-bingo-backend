@@ -2,12 +2,13 @@ FROM node:18-alpine
 
 WORKDIR /app
 
-# Install dependencies
-COPY package*.json ./
-# First, install all dependencies to generate package-lock.json
-RUN npm install
+# Copy package files
+COPY package.json package-lock.json ./
 
-# Copy application code
+# Install dependencies
+RUN npm ci --only=production
+
+# Copy app source
 COPY . .
 
 # Create non-root user
@@ -18,5 +19,5 @@ USER nodejs
 # Expose port
 EXPOSE 3000
 
-# Start application
+# Start the app
 CMD ["node", "server.js"]
