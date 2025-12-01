@@ -3,10 +3,10 @@ FROM node:18-alpine
 WORKDIR /app
 
 # Copy package files
-COPY package.json package-lock.json ./
+COPY package*.json ./
 
-# Install dependencies
-RUN npm ci --only=production
+# Install dependencies - use npm install instead of npm ci
+RUN npm install --production --omit=dev
 
 # Copy app source
 COPY . .
@@ -19,5 +19,5 @@ USER nodejs
 # Expose port
 EXPOSE 3000
 
-# Start the app
+# Start application
 CMD ["node", "server.js"]
