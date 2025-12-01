@@ -8,6 +8,7 @@
     "numReplicas": 1,
     "startCommand": "node server.js",
     "healthcheckPath": "/health",
-    "healthcheckTimeout": 60
+    "healthcheckTimeout": 30,
+    "restartPolicyType": "ON_FAILURE"
   }
 }
