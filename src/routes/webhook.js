@@ -1,8 +1,16 @@
 const express = require('express');
 const router = express.Router();
-const paymentController = require('../controllers/paymentController');
+const botController = require('../controllers/botController');
 
-// Stripe webhook (no authentication needed for webhooks)
-router.post('/stripe', express.raw({ type: 'application/json' }), paymentController.handleStripeWebhook);
+// Telegram webhook endpoint
+router.post('/telegram', botController.handleCommand.bind(botController));
+
+// Test endpoint
+router.get('/test', (req, res) => {
+  res.json({ 
+    message: 'Webhook is working!',
+    timestamp: new Date().toISOString()
+  });
+});
 
 module.exports = router;
