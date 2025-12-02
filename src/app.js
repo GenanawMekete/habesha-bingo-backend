@@ -10,6 +10,9 @@ const paymentRoutes = require('./routes/payments');
 const webhookRoutes = require('./routes/webhook');
 
 const app = express();
+// Add bot webhook route
+const botController = require('./controllers/botController');
+app.post('/webhook/telegram', botController.handleCommand);
 
 // Security middleware
 app.use(helmet());
