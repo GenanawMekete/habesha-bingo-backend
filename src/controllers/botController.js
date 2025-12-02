@@ -1,6 +1,63 @@
 const User = require('../models/User');
 
 class BotController {
+
+async handleCommand(req, res) {
+  try {
+    const { message } = req.body;
+    
+    if (!message || !message.text) return res.sendStatus(200);
+    
+    const chatId = message.chat.id;
+    const text = message.text.toLowerCase();
+    const user = await User.findOne({ telegramId: chatId.toString() });
+    
+    let response = '';
+    
+    // Map commands to functions
+    switch(true) {
+      case text.startsWith('/start'):
+        response = this.handleStart(user);
+        break;
+      case text.startsWith('/register'):
+        response = await this.handleRegister(chatId, user);
+        break;
+      case text.startsWith('/play'):
+        response = this.handlePlay();
+        break;
+      case text.startsWith('/deposit'):
+        response = this.handleDeposit();
+        break;
+      case text.startsWith('/balance'):
+        response = await this.handleBalance(user);
+        break;
+      case text.startsWith('/withdraw'):
+        response = this.handleWithdraw(user);
+        break;
+      case text.startsWith('/transfer'):
+        response = this.handleTransfer(text);
+        break;
+      case text.startsWith('/instruction'):
+        response = this.handleInstruction();
+        break;
+      case text.startsWith('/support'):
+        response = this.handleSupport();
+        break;
+      case text.startsWith('/invite'):
+        response = this.handleInvite(chatId);
+        break;
+      default:
+        response = this.handleDefault();
+    }
+    
+    await this.sendMessage(chatId, response);
+    res.sendStatus(200);
+    
+  } catch (error) {
+    console.error('Command error:', error);
+    res.sendStatus(200);
+  }
+}
   // Handle bot commands
   async handleCommand(req, res) {
     try {
