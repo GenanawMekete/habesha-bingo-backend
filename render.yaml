@@ -1,0 +1,12 @@
+# Create render.yaml in your backend root:
+services:
+  - type: web
+    name: habesha-bingo-backend
+    env: node
+    buildCommand: npm install && npm run build
+    startCommand: npm start
+    envVars:
+      - key: NODE_VERSION
+        value: 18.17.0
+      - key: MONGODB_URI
+        sync: false
