@@ -2,6 +2,11 @@ const express = require('express');
 const mongoose = require('mongoose');
 const cors = require('cors');
 const webhookRoutes = require('./routes/webhook');
+// In your backend connection file (likely server.js, index.js, or config/database.js)
+const mongoose = require('mongoose');
+
+// Use environment variable, fallback to localhost for development
+const mongoURI = process.env.MONGODB_URI || process.env.DATABASE_URL || 'mongodb://localhost:27017/habesha-bingo';
 
 const app = express();
 
@@ -29,10 +34,12 @@ app.use((err, req, res, next) => {
 });
 
 // Connect to MongoDB
-mongoose.connect(process.env.MONGODB_URI || 'mongodb://localhost:27017/habesha-bingo', {
+mongoose.connect(mongoURI, {
   useNewUrlParser: true,
   useUnifiedTopology: true,
-});
+})
+.then(() => console.log('MongoDB connected successfully'))
+.catch(err => console.log('MongoDB connection error:', err));
 
 const db = mongoose.connection;
 db.on('error', console.error.bind(console, 'MongoDB connection error:'));
